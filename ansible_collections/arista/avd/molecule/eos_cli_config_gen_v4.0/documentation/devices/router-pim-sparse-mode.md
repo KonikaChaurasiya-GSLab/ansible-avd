@@ -33,7 +33,7 @@
 
 | Management Interface | description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management1 | oob_management | oob | MGMT | -  | - |
+| Management1 | oob_management | oob | MGMT | - | - |
 
 ### Management Interfaces Device Configuration
 
@@ -69,7 +69,7 @@ interface Management1
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | false |
+| default | False |
 
 ### IP Routing Device Configuration
 
@@ -81,7 +81,7 @@ interface Management1
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | false |
+| default | False |
 
 # Multicast
 
@@ -90,6 +90,8 @@ interface Management1
 ### Router PIM Sparse Mode
 
 #### IP Sparse Mode Information
+
+BFD enabled: False
 
 ##### IP Rendezvous Information
 
@@ -104,6 +106,11 @@ interface Management1
 | 10.38.1.161 | 10.50.64.16 | 15 |
 
 ##### IP Sparse Mode VRFs
+
+| VRF Name | BFD Enabled |
+| -------- | ----------- |
+| MCAST_VRF1 | False |
+| MCAST_VRF2_ALL_GROUPS | False |
 
 | VRF Name | Rendezvous Point Address | Group Address |
 | -------- | ------------------------ | ------------- |

@@ -471,12 +471,14 @@ ip_tacacs_source_interfaces:
 ```yaml
 local_users:
   - name: < user_1 >
+    disabled: < true | false | default -> false >
     privilege: < 1-15 >
     role: < role >
     sha512_password: "< sha_512_password >"
     no_password: < true | do not configure a password for given username. sha512_password MUST not be defined for this user. >
     ssh_key: "< ssh_key_string >"
   - name: < user_2 >
+    disabled: < true | false | default -> false >
     privilege: < 1-15 >
     role: < role >
     sha512_password: "< sha_512_password >"
@@ -707,6 +709,10 @@ route_maps:
           - "< match rule 2 as string >"
         set:
           - "< set as string >"
+        sub_route_map: < sub-route-map name >
+        continue:
+          enabled: < true | false >
+          sequence_number: < integer >
       - sequence: < sequence_id_2 >
         type: < permit | deny >
         match:
@@ -1742,6 +1748,8 @@ management_security:
   ssl_profiles:
     - name: <ssl_profile_1>
       tls_versions: < list of allowed tls versions as string >
+      # cipher_list syntax follows the openssl cipher strings format
+      cipher_list: < column separated list of allowed ciphers as a string >
       certificate:
         file: < certificate filename >
         key: < key filename >
@@ -1916,6 +1924,7 @@ router_multicast:
 ```yaml
 router_pim_sparse_mode:
   ipv4:
+    bfd: < true | false >
     ssm_range: < range >
     rp_addresses:
       - address: < rp_address_1 >
@@ -1931,6 +1940,7 @@ router_pim_sparse_mode:
   vrfs:
     - name: < vrf_name >
       ipv4:
+        bfd: < true | false >
         rp_addresses:
           - address: < rp_address_1 >
             groups:
@@ -2011,6 +2021,8 @@ daemon_terminattr:
   # ECO sFlow Collector address to listen on to receive sFlow packets (default "127.0.0.1:6343")
   # This flag is enabled by default and does not have to be added to the daemon configuration
   sflowaddr: < IPV4_address:port >
+  # Subscribe to dynamic device configuration from CloudVision (default false)
+  cvconfig: < true | false >
 ```
 
 You can either provide a list of IPs/FQDNs to target on-premise Cloudvision cluster or use DNS name for your Cloudvision as a Service instance. Streaming to multiple clusters both on-prem and cloud service is supported.
@@ -2445,10 +2457,10 @@ qos_profiles:
     cos: < cos-value >
     dscp: < dscp-value >
     tx_queues:
-      id: < tx-queue-id >
+      - id: < tx-queue-id >
         bandwidth_percent: < value >
         priority: < string >
-      id: < tx-queue-id >
+      - id: < tx-queue-id >
         bandwidth_percent: < value >
         priority: < string >
 ```
@@ -3326,7 +3338,7 @@ traffic_policies:
             - protocol: vrrp
             # The 'protocol neighbors' subcommand is not supported when any
             # other match subcommands are configured
-            neighbors:
+            - protocol: neighbors
           actions:
             dscp: < dscp code value >
             traffic_class: < traffic class id >

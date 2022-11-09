@@ -44,6 +44,7 @@ Requirements are located here: [avd-requirements](../../README.md#Requirements)
   ```bash
   ln -s ../../shared_repo/custom_avd_templates/ ./custom_avd_templates
   ```
+
 - The output will be rendered at the end of the configuration.
 - The order of custom templates in the list can be important if they overlap.
 - It is recommenended to use a `!` delimiter at the top of each custom template.
@@ -315,6 +316,20 @@ aaa_server_groups:
       - server: < host1_ip_address >
 ```
 
+#### CVX
+
+CVX server features are not supported on physical switches. See `management_cvx` for client configurations.
+
+```yaml
+cvx:
+  shutdown: < true | false >
+  services:
+    mcs:
+      redis:
+        password: < password >
+        password_type: < 0 | 7 | 8a | default -> 7 >
+      shutdown: < true | false >
+```
 
 #### Enable Password
 
@@ -348,12 +363,14 @@ ip_tacacs_source_interfaces:
 ```yaml
 local_users:
   < user_1 >:
+    disabled: < true | false | default -> false >
     privilege: < 1-15 >
     role: < role >
     sha512_password: "< sha_512_password >"
     no_password: < true | do not configure a password for given username. sha512_password MUST not be defined for this user. >
     ssh_key: "< ssh_key_string >"
   < user_2 >:
+    disabled: < true | false | default -> false >
     privilege: < 1-15 >
     role: < role >
     sha512_password: "< sha_512_password >"
@@ -644,6 +661,10 @@ route_maps:
           - "< match rule 2 as string >"
         set:
           - "< set as string >"
+        sub_route_map: < sub-route-map name >
+        continue:
+          enabled: < true | false >
+          sequence_number: < integer >
       < sequence_id_2 >:
         type: < permit | deny >
         match:
@@ -1359,8 +1380,20 @@ vlan_interfaces:
         source_interface: < source_interface_name >
     ipv6_enable: < true | false >
     ipv6_address: < IPv6_address/Mask >
+    # The below "ipv6_address_virtual" key will be deprecated in AVD v4.0 in favor of the new "ipv6_address_virtuals"
+    # If both "ipv6_address_virtual" and "ipv6_address_virtuals" are set, all addresses will be configured
     ipv6_address_virtual: < IPv6_address/Mask >
+    # The new "ipv6_address_virtuals" key support multiple virtual ip addresses.
+    ipv6_address_virtuals:
+      - < IPv6_address/Mask >
+      - < IPv6_address/Mask >
     ipv6_address_link_local: < link_local_IPv6_address/Mask >
+    # The below "ipv6_virtual_router_address" key will be deprecated in AVD v4.0 - These should not be mixed with the new "ipv6_virtual_router_addresses" key below to avoid conflicts.
+    ipv6_virtual_router_address: < IPv6_address >
+    # New improved "VARPv6" data model to support multiple VARPv6 addresses.
+    ipv6_virtual_router_addresses:
+      - < IPv6_address >
+      - < IPv6_address >
     ipv6_nd_ra_disabled: < true | false >
     ipv6_nd_managed_config_flag: < true | false >
     ipv6_nd_prefixes:
@@ -1404,12 +1437,6 @@ vlan_interfaces:
         dr_priority: < 0-429467295 >
         sparse_mode: < true | false >
         local_interface: < local_interface_name >
-    # The below "ipv6_virtual_router_address" key will be deprecated in AVD v4.0 - These should not be mixed with the new "ipv6_virtual_router_addresses" key below to avoid conflicts.
-    ipv6_virtual_router_address: < IPv6_address >
-    # New improved "VARPv6" data model to support multiple VARPv6 addresses.
-    ipv6_virtual_router_addresses:
-      - < IPv6_address/Mask | IPv6_address >
-      - < IPv6_address/Mask | IPv6_address >
     isis_enable: < ISIS Instance >
     isis_passive: < boolean >
     isis_metric: < integer >
@@ -1604,6 +1631,19 @@ lldp:
   run: < true | false >
 ```
 
+### MCS client
+
+```yaml
+mcs_client:
+  shutdown: < true | false >
+  cvx_secondary:
+    name: < name >
+    shutdown: < true | false >
+    server_hosts:
+      - < IP | hostname >
+      - < IP | hostname >
+```
+
 ### MACsec
 
 ```yaml
@@ -1739,6 +1779,7 @@ management_interfaces:
   < Management_interface_1 >:
     description: < description >
     shutdown: < true | false >
+    mtu: < mtu >
     vrf: < vrf_name >
     ip_address: < IPv4_address/Mask >
     ipv6_enable: < true | false >
@@ -1831,6 +1872,7 @@ management_console:
 ```
 
 #### Management CVX
+
 ```yaml
 management_cvx:
   shutdown: < true | false >
@@ -1860,6 +1902,8 @@ management_security:
   ssl_profiles:
     - name: <ssl_profile_1>
       tls_versions: < list of allowed tls versions as string >
+      # cipher_list syntax follows the openssl cipher strings format
+      cipher_list: < column separated list of allowed ciphers as a string >
       certificate:
         file: < certificate filename >
         key: < key filename >
@@ -2056,6 +2100,7 @@ router_multicast:
 ```yaml
 router_pim_sparse_mode:
   ipv4:
+    bfd: < true | false >
     ssm_range: < range >
     rp_addresses:
       < rp_address_1 >:
@@ -2071,6 +2116,7 @@ router_pim_sparse_mode:
   vrfs:
     - name: < vrf_name >
       ipv4:
+        bfd: < true | false >
         rp_addresses:
           - address: < rp_address_1 >
             groups:
@@ -2151,6 +2197,8 @@ daemon_terminattr:
   # ECO sFlow Collector address to listen on to receive sFlow packets (default "127.0.0.1:6343")
   # This flag is enabled by default and does not have to be added to the daemon configuration
   sflowaddr: < IPV4_address:port >
+  # Subscribe to dynamic device configuration from CloudVision (default false)
+  cvconfig: < true | false >
 ```
 
 You can either provide a list of IPs/FQDNs to target on-premise Cloudvision cluster or use DNS name for your Cloudvision as a Service instance. Streaming to multiple clusters both on-prem and cloud service is supported.
@@ -2281,12 +2329,15 @@ trackers:
 sflow:
   sample: < sample_rate >
   dangerous: < true | false >
+  polling_interval: < polling_interval_seconds >
   vrfs:
     <vrf_name_1>:
       destinations:
         < sflow_destination_ip_1>:
         < sflow_destination_ip_2>:
           port: < port_number >
+      # source and source_interface are mutually exclusive. If both are defined, source_interface takes precedence
+      source: < source_ip_address >
       source_interface: < source_interface >
     <vrf_name_2>:
       destinations:
@@ -2296,7 +2347,12 @@ sflow:
     < sflow_destination_ip_1 >:
       port: < port_number >
     < sflow_destination_ip_2 >:
+  # source and source_interface are mutually exclusive. If both are defined, source_interface takes precedence
+  source: < source_ip_address >
   source_interface: < source_interface >
+  extensions:
+    - name: <bgp | router | switch | tunnel >
+      enabled: < true | false >
   interface:
     disable:
       default: < true | false >
@@ -2684,8 +2740,15 @@ qos_profiles:
 
 ```yaml
 queue_monitor_length:
+  # "enabled: true" will be required in AVD4.0. In AVD3.x default is true as long as queue_monitor_length is defined and not None
+  enabled: < true | false >
   log: < seconds >
   notifying: < true | false - should only be used for platforms supporting the "queue-monitor length notifying" CLI >
+  cpu:
+    thresholds:
+      # "high" threshold is mandatory
+      high: < integer >
+      low: < integer >
 ```
 
 #### Queue Monitor Streaming

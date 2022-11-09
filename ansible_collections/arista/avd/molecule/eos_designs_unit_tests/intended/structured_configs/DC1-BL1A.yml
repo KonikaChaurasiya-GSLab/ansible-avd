@@ -122,7 +122,7 @@ router_bgp:
           maximum_routes: 0
           default_originate:
             always: false
-            route_map_out: RM-Tenant_A_WAN_Zone-123.1.1.10-SET-NEXT-HOP-OUT
+            route_map: RM-Tenant_A_WAN_Zone-123.1.1.10-SET-NEXT-HOP-OUT
           update_source: Loopback123
           ebgp_multihop: 3
           route_map_in: RM-123-1-1-10-IN
@@ -295,9 +295,9 @@ event_handlers:
     action_type: bash
     action: FastCli -p 15 -c "clear bgp evpn host-flap"
     delay: 300
-    asynchronous: handler.asynchronous
     trigger: on-logging
     regex: EVPN-3-BLACKLISTED_DUPLICATE_MAC
+    asynchronous: true
 name_server:
   source:
     vrf: MGMT
@@ -316,15 +316,15 @@ spanning_tree:
       priority: 4096
 local_users:
   admin:
-    privilege: 15
-    role: network-admin
-    no_password: true
+    disabled: true
   cvpadmin:
     privilege: 15
     role: network-admin
     sha512_password: $6$rZKcbIZ7iWGAWTUM$TCgDn1KcavS0s.OV8lacMTUkxTByfzcGlFlYUWroxYuU7M/9bIodhRO7nXGzMweUxvbk8mJmQl8Bh44cRktUj.
     ssh_key: ssh-rsa AAAAB3NzaC1yc2EAA82spi2mkxp4FgaLi4CjWkpnL1A/MD7WhrSNgqXToF7QCb9Lidagy9IHafQxfu7LwkFdyQIMu8XNwDZIycuf29wHbDdz1N+YNVK8zwyNAbMOeKMqblsEm2YIorgjzQX1m9+/rJeFBKz77PSgeMp/Rc3txFVuSmFmeTy3aMkU=
       cvpadmin@hostmachine.local
+clock:
+  timezone: correctly_templated_timezone
 vrfs:
   MGMT:
     ip_routing: false
@@ -357,6 +357,10 @@ platform:
   sand:
     lag:
       hardware_only: true
+mac_address_table:
+  aging_time: 42
+  notification_host_flap:
+    logging: true
 management_api_http:
   enable_vrfs:
     MGMT: {}
@@ -367,9 +371,9 @@ struct_cfg:
     vrfs:
       OOB:
         destinations:
-          192.168.200.10: None
-          10.0.200.90: None
-        source_interface: Management1
+          192.168.200.10: null
+          10.0.200.90: null
+        source_interface: '{{ switch.mgmt_interface }}'
 ethernet_interfaces:
   Ethernet1:
     peer: DC1-SPINE1
@@ -549,8 +553,7 @@ router_ospf:
       - Vlan150
       max_lsa: 15000
       redistribute:
-        bgp:
-          enabled: true
+        bgp: {}
 vxlan_interface:
   Vxlan1:
     description: DC1-BL1A_VTEP
@@ -579,7 +582,7 @@ sflow:
   vrfs:
     OOB:
       destinations:
-        192.168.200.10: None
-        10.0.200.90: None
+        192.168.200.10: null
+        10.0.200.90: null
       source_interface: Management1
 ntp: null

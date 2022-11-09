@@ -159,7 +159,7 @@ mac_address_table:
       # VRF name | Required
       # vrf "default" is supported under network-services. Currently the supported options for "default" vrf are route-target,
       # route-distinguisher settings, structured_config, raw_eos_cli in bgp and SVIs are the only supported interface type.
-      # Vlan-aware-bundles are supported as well inside default vrf. OSPF is not supported currently.
+      # Static-routes and vlan-aware-bundles are supported as well inside default vrf. OSPF is not supported currently.
       < tenant_a_vrf_1 >:
 
         # Optional
@@ -237,6 +237,7 @@ mac_address_table:
 
         # Dictionary of SVIs | Required.
         # This will create both the L3 SVI and L2 VLAN based on filters applied to l3leaf and l2leaf.
+        # Any SVI setting, defined under svis[svi] can also be defined under the svis[svi].nodes[node]
         svis:
 
           # SVI interface id and VLAN id. | Required
@@ -296,23 +297,30 @@ mac_address_table:
             ip_address_virtual_secondaries:
               - < IPv4_address/Mask >
 
-            # ipv6 address virtual to configure VXLAN Anycast IP address
-            # Optional
+            # ipv6 address virtuals to configure VXLAN Anycast IP address | Optional
+            # The below "ipv6_address_virtual" key will be deprecated in AVD v4.0 in favor of the new "ipv6_address_virtuals"
+            # If both "ipv6_address_virtual" and "ipv6_address_virtuals" are set, all addresses will be configured
             ipv6_address_virtual: < IPv6_address/Mask >
-            ipv6_address_virtual_secondaries:
+            # The new "ipv6_address_virtuals" key support multiple virtual ip addresses.
+            ipv6_address_virtuals:
+              - < IPv6_address/Mask >
               - < IPv6_address/Mask >
 
             # ip virtual-router address
             # note, also requires an IP address to be configured on the SVI where it is applied.
             # Optional
+            # When ip_address_virtual and ip_virtual_router_addresses are defined in an SVI the node that was defined with the ip_address
+            # will be configured with ip_virtual_router_addresses. For ip_virtual_router_addresses to be configured, ip_address must be defined
             ip_virtual_router_addresses:
               - < IPv4_address/Mask | IPv4_address >
 
             # ipv6 virtual-router address
             # note, also requires an IPv6 address to be configured on the SVI where it is applied.
             # Optional
+            # When ipv6_address_virtual and ipv6_virtual_router_addresses are defined in an SVI the node that was defined with the ipv6_address
+            # will be configured with ipv6_virtual_router_addresses. For ipv6_virtual_router_addresses to be configured, ipv6_address must be defined
             ipv6_virtual_router_addresses:
-              - < IPv6_address/Mask | IPv6_address >
+              - < IPv6_address >
 
             # IP Helper for DHCP relay
             ip_helpers:
@@ -360,6 +368,13 @@ mac_address_table:
                 - id: < int >
                   hash_algorithm: < md5 | sha1 | sha256 | sha384 | sha512, Default -> sha512 >
                   key: < key password >
+
+            # Structured configuration and eos cli commands rendered on router_bgp.vlans
+            # This configuration will not be applied to vlan aware bundles
+            bgp:
+              raw_eos_cli: |
+                < multiline eos cli >
+              structured_config: < dictionary >
 
             # EOS CLI rendered directly on the VLAN interface in the final EOS configuration
             raw_eos_cli: |
@@ -586,6 +601,13 @@ mac_address_table:
           enabled: < true | false | default false >
           source_address: < ipv4_address -> default ip address of Loopback0 >
           version: < 1, 2, 3 -> default 2 (EOS) >
+
+        # Structured configuration and eos cli commands rendered on router_bgp.vlans
+        # This configuration will not be applied to vlan aware bundles
+        bgp:
+          raw_eos_cli: |
+            < multiline eos cli >
+          structured_config: < dictionary >
 
   < tenant_b >:
     mac_vrf_vni_base: < 10000-16770000 >
@@ -815,7 +837,7 @@ dc1_tenants:
             tags: [ DC1_BL1, DC1_BL2 ]
             enabled: true
             ipv6_virtual_router_addresses:
-              - 2001:db8:253::/64
+              - 2001:db8:253::1
             nodes:
               DC1-BL1A:
                 ip_address: 2001:db8:253::2/64

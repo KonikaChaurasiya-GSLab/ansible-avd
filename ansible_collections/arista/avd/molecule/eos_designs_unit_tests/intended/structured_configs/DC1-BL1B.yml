@@ -122,7 +122,7 @@ router_bgp:
           maximum_routes: 0
           default_originate:
             always: false
-            route_map_out: RM-Tenant_A_WAN_Zone-123.1.1.10-SET-NEXT-HOP-OUT
+            route_map: RM-Tenant_A_WAN_Zone-123.1.1.10-SET-NEXT-HOP-OUT
           update_source: Loopback123
           ebgp_multihop: 3
           route_map_in: RM-123-1-1-10-IN
@@ -307,9 +307,7 @@ spanning_tree:
       priority: 4096
 local_users:
   admin:
-    privilege: 15
-    role: network-admin
-    no_password: true
+    disabled: true
   cvpadmin:
     privilege: 15
     role: network-admin
@@ -358,9 +356,9 @@ struct_cfg:
     vrfs:
       OOB:
         destinations:
-          192.168.200.10: None
-          10.0.200.90: None
-        source_interface: Management1
+          192.168.200.10: null
+          10.0.200.90: null
+        source_interface: '{{ switch.mgmt_interface }}'
 ethernet_interfaces:
   Ethernet1:
     peer: DC1-SPINE1
@@ -528,8 +526,7 @@ router_ospf:
       - Vlan150
       max_lsa: 15000
       redistribute:
-        bgp:
-          enabled: true
+        bgp: {}
 vxlan_interface:
   Vxlan1:
     description: DC1-BL1B_VTEP
@@ -558,7 +555,7 @@ sflow:
   vrfs:
     OOB:
       destinations:
-        192.168.200.10: None
-        10.0.200.90: None
+        192.168.200.10: null
+        10.0.200.90: null
       source_interface: Management1
 ntp: null

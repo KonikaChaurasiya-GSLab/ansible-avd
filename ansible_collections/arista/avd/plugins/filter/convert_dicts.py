@@ -1,7 +1,8 @@
 #
 # def arista.avd.convert_dicts
 #
-from __future__ import (absolute_import, division, print_function)
+from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 
@@ -53,7 +54,7 @@ def convert_dicts(dictionary, primary_key="name", secondary_key=None):
     any
         Returns list of dictionaries or input variable untouched if not a nested dictionary/list.
     """
-    if not isinstance(dictionary, (dict, list)) or os.environ.get('AVD_DISABLE_CONVERT_DICTS'):
+    if not isinstance(dictionary, (dict, list)) or os.environ.get("AVD_DISABLE_CONVERT_DICTS"):
         # Not a dictionary/list, return the original
         return dictionary
     elif isinstance(dictionary, list):
@@ -63,32 +64,41 @@ def convert_dicts(dictionary, primary_key="name", secondary_key=None):
                 item = {}
                 item.update({primary_key: element})
                 output.append(item)
+            elif primary_key not in element and secondary_key is not None:
+                # if element of nested dictionary is a dictionary but primary key is missing, insert primary and secondary keys.
+                for key in element:
+                    output.append(
+                        {
+                            primary_key: key,
+                            secondary_key: element[key],
+                        }
+                    )
             else:
                 output.append(element)
         return output
     else:
         output = []
         for key in dictionary:
-            if not isinstance(dictionary[key], dict):
-                # Not a nested dictionary, add secondary key for the values if secondary key is provided
-                if secondary_key is not None:
-                    item = {}
-                    item.update({primary_key: key})
-                    item.update({secondary_key: dictionary[key]})
-                    output.append(item)
-                else:
-                    # Catch cornercase where dictionary value is not a dict because of old data models
-                    # Ex <key>: "none" or <key>: null or <key>: "" will all be overwritten with {<primary_key>: <key>}
-                    output.append({primary_key: key})
-            else:
-                item = dictionary[key].copy()
+            if secondary_key is not None:
+                # Add secondary key for the values if secondary key is provided
+                item = {}
                 item.update({primary_key: key})
+                item.update({secondary_key: dictionary[key]})
                 output.append(item)
+            else:
+                if not isinstance(dictionary[key], dict):
+                    # Not a nested dictionary
+                    output.append({primary_key: key})
+                else:
+                    # Nested dictionary
+                    item = dictionary[key].copy()
+                    item.update({primary_key: key})
+                    output.append(item)
         return output
 
 
 class FilterModule(object):
     def filters(self):
         return {
-            'convert_dicts': convert_dicts,
+            "convert_dicts": convert_dicts,
         }

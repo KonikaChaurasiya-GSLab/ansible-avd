@@ -33,8 +33,8 @@
 
 | Management Interface | description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management1 | oob_management | oob | MGMT | -  | - |
-| Vlan123 | inband_management | inband | default | -  | - |
+| Management1 | oob_management | oob | MGMT | - | - |
+| Vlan123 | inband_management | inband | default | - | - |
 
 ### Management Interfaces Device Configuration
 
@@ -74,7 +74,7 @@ interface Vlan123
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | false |
+| default | False |
 
 ### IP Routing Device Configuration
 
@@ -86,7 +86,7 @@ interface Vlan123
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | false |
+| default | False |
 
 # Multicast
 

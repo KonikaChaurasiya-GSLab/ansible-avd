@@ -519,8 +519,8 @@ vlan_interfaces:
   Vlan4090:
     description: MLAG_PEER_L3_PEERING
     shutdown: false
-    ip_address: 10.255.251.7/31
     mtu: 1500
+    ip_address: 10.255.251.7/31
   Vlan4092:
     description: MLAG_PEER
     shutdown: false
@@ -788,7 +788,7 @@ port_channel_interfaces:
       multicast:
         level: 1
         unit: percent
-      unknown-unicast:
+      unknown_unicast:
         level: 2
         unit: percent
     mlag: 14
@@ -811,7 +811,7 @@ port_channel_interfaces:
       multicast:
         level: 1
         unit: percent
-      unknown-unicast:
+      unknown_unicast:
         level: 2
         unit: percent
     mlag: 15
@@ -834,7 +834,7 @@ port_channel_interfaces:
       multicast:
         level: 1
         unit: percent
-      unknown-unicast:
+      unknown_unicast:
         level: 2
         unit: percent
     mlag: 17
@@ -860,7 +860,7 @@ port_channel_interfaces:
       multicast:
         level: 1
         unit: percent
-      unknown-unicast:
+      unknown_unicast:
         level: 2
         unit: percent
     mlag: 18
@@ -886,7 +886,7 @@ port_channel_interfaces:
       multicast:
         level: 1
         unit: percent
-      unknown-unicast:
+      unknown_unicast:
         level: 2
         unit: percent
     mlag: 19
@@ -927,6 +927,13 @@ port_channel_interfaces:
     mode: access
     vlans: 110
     mlag: 42
+  Port-Channel1291:
+    description: server22_port_channel_with_custom_id_server22_port_channel_with_custom_id
+    type: switched
+    shutdown: false
+    mode: access
+    vlans: 110
+    mlag: 1291
 ethernet_interfaces:
   Ethernet5:
     peer: DC1-SVC3A
@@ -1033,7 +1040,7 @@ ethernet_interfaces:
       multicast:
         level: 1
         unit: percent
-      unknown-unicast:
+      unknown_unicast:
         level: 2
         unit: percent
   Ethernet12:
@@ -1058,7 +1065,7 @@ ethernet_interfaces:
       multicast:
         level: 1
         unit: percent
-      unknown-unicast:
+      unknown_unicast:
         level: 2
         unit: percent
   Ethernet13:
@@ -1084,7 +1091,7 @@ ethernet_interfaces:
       multicast:
         level: 1
         unit: percent
-      unknown-unicast:
+      unknown_unicast:
         level: 2
         unit: percent
   Ethernet14:
@@ -1110,7 +1117,7 @@ ethernet_interfaces:
       multicast:
         level: 1
         unit: percent
-      unknown-unicast:
+      unknown_unicast:
         level: 2
         unit: percent
     channel_group:
@@ -1138,7 +1145,7 @@ ethernet_interfaces:
       multicast:
         level: 1
         unit: percent
-      unknown-unicast:
+      unknown_unicast:
         level: 2
         unit: percent
     channel_group:
@@ -1167,7 +1174,7 @@ ethernet_interfaces:
       multicast:
         level: 1
         unit: percent
-      unknown-unicast:
+      unknown_unicast:
         level: 2
         unit: percent
   Ethernet17:
@@ -1192,7 +1199,7 @@ ethernet_interfaces:
       multicast:
         level: 1
         unit: percent
-      unknown-unicast:
+      unknown_unicast:
         level: 2
         unit: percent
     channel_group:
@@ -1222,7 +1229,7 @@ ethernet_interfaces:
       multicast:
         level: 1
         unit: percent
-      unknown-unicast:
+      unknown_unicast:
         level: 2
         unit: percent
     channel_group:
@@ -1252,7 +1259,7 @@ ethernet_interfaces:
       multicast:
         level: 1
         unit: percent
-      unknown-unicast:
+      unknown_unicast:
         level: 2
         unit: percent
     channel_group:
@@ -1352,6 +1359,18 @@ ethernet_interfaces:
     vlans: 110
     channel_group:
       id: 42
+      mode: active
+  Ethernet29:
+    peer: server22_port_channel_with_custom_id
+    peer_interface: Eth2
+    peer_type: server
+    description: server22_port_channel_with_custom_id_Eth2
+    type: switched
+    shutdown: false
+    mode: access
+    vlans: 110
+    channel_group:
+      id: 1291
       mode: active
 mlag_configuration:
   domain_id: DC1_SVC3

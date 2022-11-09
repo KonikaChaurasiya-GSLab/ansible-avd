@@ -63,7 +63,7 @@
 
 | Management Interface | description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management1 | oob_management | oob | MGMT | -  | - |
+| Management1 | oob_management | oob | MGMT | - | - |
 
 ### Management Interfaces Device Configuration
 
@@ -120,9 +120,9 @@ management api http-commands
 
 ### Local Users Summary
 
-| User | Privilege | Role |
-| ---- | --------- | ---- |
-| admin | 15 | network-admin |
+| User | Privilege | Role | Disabled |
+| ---- | --------- | ---- | -------- |
+| admin | 15 | network-admin | False |
 
 ### Local Users Device Configuration
 
@@ -245,9 +245,9 @@ vlan 2601
 
 | Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_LINK_TO_DC1-POD2-SPINE1_Ethernet3 | routed | - | 172.17.120.1/31 | default | 1500 | false | - | - |
-| Ethernet2 | P2P_LINK_TO_DC1-POD2-SPINE2_Ethernet3 | routed | - | 172.17.120.3/31 | default | 1500 | false | - | - |
-| Ethernet3 | P2P_LINK_TO_DC1-RS2_Ethernet3 | routed | - | 172.17.10.12/31 | default | 1500 | false | - | - |
+| Ethernet1 | P2P_LINK_TO_DC1-POD2-SPINE1_Ethernet3 | routed | - | 172.17.120.1/31 | default | 1500 | False | - | - |
+| Ethernet2 | P2P_LINK_TO_DC1-POD2-SPINE2_Ethernet3 | routed | - | 172.17.120.3/31 | default | 1500 | False | - | - |
+| Ethernet3 | P2P_LINK_TO_DC1-RS2_Ethernet3 | routed | - | 172.17.10.12/31 | default | 1500 | False | - | - |
 
 ### Ethernet Interfaces Device Configuration
 
@@ -336,13 +336,13 @@ interface Loopback101
 
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
-| Vlan110 | set from structured_config on svi (was Tenant_A_OP_Zone_1) | Common_VRF | - | false |
-| Vlan111 | Tenant_A_OP_Zone_2 | Common_VRF | - | true |
-| Vlan112 | Tenant_A_OP_Zone_3 | Common_VRF | - | false |
-| Vlan113 | SVI_with_no_vxlan | Common_VRF | - | false |
-| Vlan1100 | test_svi | vrf_with_loopbacks_from_overlapping_pool | - | false |
-| Vlan1101 | test_svi | vrf_with_loopbacks_from_pod_pools | - | false |
-| Vlan1102 | test_svi | vrf_with_loopbacks_dc1_pod1_only | - | false |
+| Vlan110 | set from structured_config on svi (was Tenant_A_OP_Zone_1) | Common_VRF | - | False |
+| Vlan111 | Tenant_A_OP_Zone_2 | Common_VRF | - | True |
+| Vlan112 | Tenant_A_OP_Zone_3 | Common_VRF | - | False |
+| Vlan113 | SVI_with_no_vxlan | Common_VRF | - | False |
+| Vlan1100 | test_svi | vrf_with_loopbacks_from_overlapping_pool | - | False |
+| Vlan1101 | test_svi | vrf_with_loopbacks_from_pod_pools | - | False |
+| Vlan1102 | test_svi | vrf_with_loopbacks_dc1_pod1_only | - | False |
 
 #### IPv4
 
@@ -483,7 +483,7 @@ ip virtual-router mac-address 00:1c:73:00:dc:01
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | true |
+| default | True |
 | Common_VRF | true |
 | MGMT | false |
 | vrf_with_loopbacks_dc1_pod1_only | true |
@@ -507,7 +507,7 @@ ip routing vrf vrf_with_loopbacks_from_pod_pools
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | false |
+| default | False |
 | Common_VRF | false |
 | MGMT | false |
 | vrf_with_loopbacks_dc1_pod1_only | false |
@@ -590,11 +590,11 @@ ip route vrf MGMT 0.0.0.0/0 192.168.1.254
 
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
-| 110 | 172.16.120.3:99110 | 99110:99110 | - | - | learned |
-| 111 | 172.16.120.3:50111 | 50111:50111 | - | - | learned |
-| 112 | 172.16.120.3:20112 | 20112:20112 | - | - | learned |
+| 110 | 172.16.120.3:99110 | 99110:99110 | - | - | learned<br>router-mac system |
+| 111 | 172.16.120.3:50111 | 50111:50111 | - | - | learned<br>router-mac system |
+| 112 | 172.16.120.3:20112 | 20112:20112 | - | - | learned<br>router-mac system |
 | 2500 | 172.16.120.3:2500 | 2500:2500 | - | - | learned |
-| 2600 | 172.16.120.3:32600 | 32600:32600 | - | - | learned |
+| 2600 | 172.16.120.3:32600 | 32600:32600 | - | - | learned<br>router-mac system |
 
 ### Router BGP VRFs
 
@@ -651,16 +651,34 @@ router bgp 65121
       rd 172.16.120.3:99110
       route-target both 99110:99110
       redistribute learned
+      redistribute router-mac system
+      !
+      comment
+      comment created from raw_eos_cli under router bgp svis inherited from svi profile
+      EOF
+
    !
    vlan 111
       rd 172.16.120.3:50111
       route-target both 50111:50111
       redistribute learned
+      redistribute router-mac system
+      !
+      comment
+      comment created from raw_eos_cli under router bgp svi 111
+      EOF
+
    !
    vlan 112
       rd 172.16.120.3:20112
       route-target both 20112:20112
       redistribute learned
+      redistribute router-mac system
+      !
+      comment
+      comment created from raw_eos_cli under router bgp svis inherited from svi parent profile
+      EOF
+
    !
    vlan 2500
       rd 172.16.120.3:2500
@@ -671,6 +689,12 @@ router bgp 65121
       rd 172.16.120.3:32600
       route-target both 32600:32600
       redistribute learned
+      redistribute router-mac system
+      !
+      comment
+      comment created from raw_eos_cli under router bgp l2vlan 2600
+      EOF
+
    !
    address-family evpn
       neighbor EVPN-OVERLAY-PEERS activate
@@ -778,15 +802,16 @@ ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
 
 #### RM-CONN-2-BGP
 
-| Sequence | Type | Match and/or Set |
-| -------- | ---- | ---------------- |
-| 10 | permit | match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY |
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | permit | ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY | - | - | - |
 
 #### RM-EVPN-FILTER-AS65120
 
-| Sequence | Type | Match and/or Set |
-| -------- | ---- | ---------------- |
-| 10 | deny | match as 65120 |
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | deny | as 65120 | - | - | - |
+| 20 | permit | - | - | - | - |
 
 ### Route-maps Device Configuration
 

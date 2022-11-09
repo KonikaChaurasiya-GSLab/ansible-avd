@@ -167,7 +167,7 @@ vlan 4094
 
 | Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet5 | P2P_LINK_TO_DUMMY-CORE_Ethernet1/2 | routed | - | 192.168.253.2/31 | default | 9000 | false | - | - |
+| Ethernet5 | P2P_LINK_TO_DUMMY-CORE_Ethernet1/2 | routed | - | 192.168.253.2/31 | default | 9000 | False | - | - |
 
 ### Ethernet Interfaces Device Configuration
 
@@ -278,8 +278,8 @@ interface Loopback0
 
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
-| Vlan100 | SVI_100 | default | - | false |
-| Vlan4094 | MLAG_PEER | default | 9000 | false |
+| Vlan100 | SVI_100 | default | - | False |
+| Vlan4094 | MLAG_PEER | default | 9000 | False |
 
 #### IPv4
 
@@ -336,7 +336,7 @@ ip virtual-router mac-address 00:1c:73:00:00:99
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | true |
+| default | True |
 | MGMT | false |
 
 ### IP Routing Device Configuration
@@ -352,7 +352,7 @@ no ip routing vrf MGMT
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | false |
+| default | False |
 | MGMT | false |
 
 ## Static Routes
@@ -362,12 +362,14 @@ no ip routing vrf MGMT
 | VRF | Destination Prefix | Next Hop IP             | Exit interface      | Administrative Distance       | Tag               | Route Name                    | Metric         |
 | --- | ------------------ | ----------------------- | ------------------- | ----------------------------- | ----------------- | ----------------------------- | -------------- |
 | MGMT | 0.0.0.0/0 | 172.31.0.1 | - | 1 | - | - | - |
+| default | 10.0.0.0/8 | 10.1.100.100 | - | 1 | - | - | - |
 
 ### Static Routes Device Configuration
 
 ```eos
 !
 ip route vrf MGMT 0.0.0.0/0 172.31.0.1
+ip route 10.0.0.0/8 10.1.100.100
 ```
 
 ## Router OSPF
@@ -383,6 +385,7 @@ ip route vrf MGMT 0.0.0.0/0 172.31.0.1
 | Process ID | Source Protocol | Route Map |
 | ---------- | --------------- | --------- |
 | 100 | connected | - |
+| 100 | static | - |
 
 ### OSPF Interfaces
 
@@ -402,6 +405,7 @@ router ospf 100
    no passive-interface Vlan4094
    no passive-interface Ethernet5
    max-lsa 12000
+   redistribute static
    redistribute connected
 ```
 

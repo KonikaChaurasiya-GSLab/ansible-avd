@@ -33,7 +33,7 @@
 
 | Management Interface | description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management1 | oob_management | oob | MGMT | -  | - |
+| Management1 | oob_management | oob | MGMT | - | - |
 
 ### Management Interfaces Device Configuration
 
@@ -69,7 +69,7 @@ interface Management1
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | false |
+| default | False |
 
 ### IP Routing Device Configuration
 
@@ -81,7 +81,7 @@ interface Management1
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | false |
+| default | False |
 
 # Multicast
 
@@ -90,6 +90,8 @@ interface Management1
 ### Router PIM Sparse Mode
 
 #### IP Sparse Mode Information
+
+BFD enabled: True
 
 ##### IP Rendezvous Information
 
@@ -105,6 +107,11 @@ interface Management1
 
 ##### IP Sparse Mode VRFs
 
+| VRF Name | BFD Enabled |
+| -------- | ----------- |
+| MCAST_VRF1 | True |
+| MCAST_VRF2_ALL_GROUPS | False |
+
 | VRF Name | Rendezvous Point Address | Group Address |
 | -------- | ------------------------ | ------------- |
 | MCAST_VRF1 | 10.238.2.161 | 239.12.22.12/32, 239.12.22.13/32, 239.12.22.14/32 |
@@ -116,6 +123,7 @@ interface Management1
 !
 router pim sparse-mode
    ipv4
+      bfd
       rp address 10.238.1.161 239.12.12.12/32
       rp address 10.238.1.161 239.12.12.13/32
       rp address 10.238.1.161 239.12.12.14/32
@@ -127,6 +135,7 @@ router pim sparse-mode
    !
    vrf MCAST_VRF1
       ipv4
+         bfd
          rp address 10.238.2.161 239.12.22.12/32
          rp address 10.238.2.161 239.12.22.13/32
          rp address 10.238.2.161 239.12.22.14/32

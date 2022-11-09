@@ -1,5 +1,5 @@
 {# eos - Management Interfaces #}
-{% for management_interface in management_interfaces | arista.avd.convert_dicts('name') | arista.avd.natural_sort('name') %}
+{% for management_interface in management_interfaces | arista.avd.natural_sort('name') %}
 !
 interface {{ management_interface.name }}
 {%     if management_interface.description is arista.avd.defined %}
@@ -9,6 +9,9 @@ interface {{ management_interface.name }}
    shutdown
 {%     elif management_interface.shutdown is arista.avd.defined(false) %}
    no shutdown
+{%     endif %}
+{%     if management_interface.mtu is arista.avd.defined %}
+   mtu {{ management_interface.mtu }}
 {%     endif %}
 {%     if management_interface.vrf is arista.avd.defined and management_interface.vrf is ne 'default' %}
    vrf {{ management_interface.vrf }}

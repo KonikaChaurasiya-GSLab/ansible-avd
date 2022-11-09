@@ -67,9 +67,9 @@ management api http-commands
 
 ### Local Users Summary
 
-| User | Privilege | Role |
-| ---- | --------- | ---- |
-| admin | 15 | network-admin |
+| User | Privilege | Role | Disabled |
+| ---- | --------- | ---- | -------- |
+| admin | 15 | network-admin | False |
 
 ### Local Users Device Configuration
 
@@ -140,12 +140,12 @@ vlan internal order ascending range 1006 1199
 
 | Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_LINK_TO_DC1-POD1-SPINE1_Ethernet1 | routed | - | 172.16.11.0/31 | default | 1500 | false | - | - |
-| Ethernet2 | P2P_LINK_TO_DC1-POD1-SPINE2_Ethernet1 | routed | - | 172.16.11.2/31 | default | 1500 | false | - | - |
-| Ethernet3 | P2P_LINK_TO_DC1-POD2-SPINE1_Ethernet1 | routed | - | 172.16.12.0/31 | default | 1500 | false | - | - |
-| Ethernet4 | P2P_LINK_TO_DC1-POD2-SPINE2_Ethernet1 | routed | - | 172.16.12.2/31 | default | 1500 | false | - | - |
-| Ethernet5 | P2P_LINK_TO_DC1-RS1_Ethernet1 | routed | - | 172.17.10.0/31 | default | 1500 | false | - | - |
-| Ethernet6 | P2P_LINK_TO_DC2-SUPER-SPINE1_Ethernet4 | routed | - | 11.1.2.0/31 | default | 1499 | false | - | - |
+| Ethernet1 | P2P_LINK_TO_DC1-POD1-SPINE1_Ethernet1 | routed | - | 172.16.11.0/31 | default | 1500 | False | - | - |
+| Ethernet2 | P2P_LINK_TO_DC1-POD1-SPINE2_Ethernet1 | routed | - | 172.16.11.2/31 | default | 1500 | False | - | - |
+| Ethernet3 | P2P_LINK_TO_DC1-POD2-SPINE1_Ethernet1 | routed | - | 172.16.12.0/31 | default | 1500 | False | - | - |
+| Ethernet4 | P2P_LINK_TO_DC1-POD2-SPINE2_Ethernet1 | routed | - | 172.16.12.2/31 | default | 1500 | False | - | - |
+| Ethernet5 | P2P_LINK_TO_DC1-RS1_Ethernet1 | routed | - | 172.17.10.0/31 | default | 1500 | False | - | - |
+| Ethernet6 | P2P_LINK_TO_DC2-SUPER-SPINE1_Ethernet4 | routed | - | 11.1.2.0/31 | default | 1499 | False | - | - |
 
 ### Ethernet Interfaces Device Configuration
 
@@ -248,7 +248,7 @@ service routing protocols model multi-agent
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | true |
+| default | True |
 | MGMT | false |
 
 ### IP Routing Device Configuration
@@ -264,7 +264,7 @@ no ip routing vrf MGMT
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | false |
+| default | False |
 | MGMT | false |
 
 ## Static Routes
@@ -387,9 +387,9 @@ ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
 
 #### RM-CONN-2-BGP
 
-| Sequence | Type | Match and/or Set |
-| -------- | ---- | ---------------- |
-| 10 | permit | match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY |
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | permit | ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY | - | - | - |
 
 ### Route-maps Device Configuration
 

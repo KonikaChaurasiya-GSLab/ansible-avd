@@ -228,6 +228,10 @@ Both data models support variable inheritance from profiles defined under [`port
           # Port-Channel Mode | Required
           mode: < "active" | "passive" | "on" >
 
+          # Port-Channel ID | Optional
+          # If no channel_id is specified, an id is generated from the first switch port in the port channel
+          channel_id : < port_channel_id >
+
           # Port-Channel Description - added after endpoint name in the description | Optional
           description: < port_channel_description >
 
@@ -486,9 +490,9 @@ To help provide consistency when configuring EVPN A/A ESI values, arista.avd pro
 `short_esi` is an abbreviated 3 octets value to encode [Ethernet Segment ID](https://tools.ietf.org/html/rfc7432#section-8.3.1) and LACP ID.
 Transformation from abstraction to network values is managed by a [filter_plugin](../../../plugins/README.md) and provides following result:
 
-- _EVPN ESI_: 000:000:0303:0202:0101
-- _LACP ID_: 0303.0202.0101
-- _Route Target_: 03:03:02:02:01:01
+- *EVPN ESI*: 000:000:0303:0202:0101
+- *LACP ID*: 0303.0202.0101
+- *Route Target*: 03:03:02:02:01:01
 
 In addition, setting the `short_esi` key to `auto` generates the short_esi automatically using a hash of the following data elements:
 

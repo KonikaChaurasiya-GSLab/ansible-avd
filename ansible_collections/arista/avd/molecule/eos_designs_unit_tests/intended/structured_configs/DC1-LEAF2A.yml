@@ -271,7 +271,7 @@ router_bgp:
         - '100000:40'
       redistribute_routes:
       - learned
-      vlan: 410-412
+      vlan: 410-413
     Tenant_D_WAN_Zone:
       rd: '65001:41'
       route_targets:
@@ -335,9 +335,7 @@ spanning_tree:
       priority: 4096
 local_users:
   admin:
-    privilege: 15
-    role: network-admin
-    no_password: true
+    disabled: true
   cvpadmin:
     privilege: 15
     role: network-admin
@@ -821,6 +819,9 @@ vlans:
   412:
     tenant: Tenant_D
     name: Tenant_D_v6_OP_Zone_1
+  413:
+    tenant: Tenant_D
+    name: Tenant_D_v6_OP_Zone_3
   450:
     tenant: Tenant_D
     name: Tenant_D_v6_WAN_Zone_1
@@ -969,7 +970,7 @@ vlan_interfaces:
     vrf: Tenant_D_OP_Zone
     ip_address_virtual: 10.3.10.1/24
     ipv6_address_virtual: 2001:db8:310::1/64
-    ipv6_address_virtual_secondaries:
+    ipv6_address_virtuals:
     - 2001:db8:311::1/64
     - 2001:db8:312::1/64
   Vlan411:
@@ -984,7 +985,7 @@ vlan_interfaces:
     ip_virtual_router_addresses:
     - 10.3.11.1/24
     ipv6_virtual_router_addresses:
-    - 2001:db8:311::1/64
+    - 2001:db8:311::1
   Vlan412:
     tenant: Tenant_D
     tags:
@@ -995,6 +996,24 @@ vlan_interfaces:
     ip_address_virtual: 10.4.12.254/24
     ipv6_address_virtual: 2001:db8:412::1/64
     mtu: 1560
+  Vlan413:
+    tenant: Tenant_D
+    tags:
+    - v6opzone
+    description: Tenant_D_v6_OP_Zone_3
+    shutdown: false
+    vrf: Tenant_D_OP_Zone
+    ip_address: 11.4.13.2/24
+    ipv6_address: 2001:db9:413::2/64
+    ip_virtual_router_addresses:
+    - 11.4.13.1
+    ipv6_virtual_router_addresses:
+    - 2001:db9:413::1
+    mtu: 1560
+    ip_helpers:
+      1.1.1.1:
+        source_interface: lo101
+        vrf: TEST
   Vlan450:
     tenant: Tenant_D
     tags:
@@ -1027,10 +1046,6 @@ ipv6_static_routes:
   vrf: Tenant_D_OP_Zone
   gateway: 2001:db8:311::4
   name: IPv6-test-2
-- destination_address_prefix: 2001:db8:311::/64
-  vrf: Tenant_D_OP_Zone
-  name: VARPv6
-  interface: Vlan411
 router_ospf:
   process_ids:
     30:
@@ -1041,8 +1056,7 @@ router_ospf:
       - Ethernet22
       - Ethernet23
       redistribute:
-        bgp:
-          enabled: true
+        bgp: {}
 vxlan_interface:
   Vxlan1:
     description: DC1-LEAF2A_VTEP
@@ -1086,6 +1100,8 @@ vxlan_interface:
           vni: 40411
         412:
           vni: 40412
+        413:
+          vni: 40413
         450:
           vni: 40450
         451:

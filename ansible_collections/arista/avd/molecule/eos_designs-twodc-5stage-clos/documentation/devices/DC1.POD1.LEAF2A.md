@@ -98,9 +98,9 @@ management api http-commands
 
 ### Local Users Summary
 
-| User | Privilege | Role |
-| ---- | --------- | ---- |
-| admin | 15 | network-admin |
+| User | Privilege | Role | Disabled |
+| ---- | --------- | ---- | -------- |
+| admin | 15 | network-admin | False |
 
 ### Local Users Device Configuration
 
@@ -277,11 +277,11 @@ vlan 4094
 
 | Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_LINK_TO_DC1-POD1-SPINE1_Ethernet4 | routed | - | 172.17.110.9/31 | default | 1500 | false | - | - |
-| Ethernet2 | P2P_LINK_TO_DC1-POD1-SPINE2_Ethernet4 | routed | - | 172.17.110.11/31 | default | 1500 | false | - | - |
-| Ethernet7 | P2P_LINK_TO_DC2-POD1-LEAF1A_Ethernet6 | routed | - | 100.100.100.101/24 | default | 1500 | false | - | - |
-| Ethernet11 | P2P_LINK_TO_DC1-POD1-SPINE1_Ethernet7 | routed | - | 172.17.110.13/31 | default | 1500 | false | - | - |
-| Ethernet12 | P2P_LINK_TO_DC1-POD1-SPINE2_Ethernet7 | routed | - | 172.17.110.15/31 | default | 1500 | false | - | - |
+| Ethernet1 | P2P_LINK_TO_DC1-POD1-SPINE1_Ethernet4 | routed | - | 172.17.110.9/31 | default | 1500 | False | - | - |
+| Ethernet2 | P2P_LINK_TO_DC1-POD1-SPINE2_Ethernet4 | routed | - | 172.17.110.11/31 | default | 1500 | False | - | - |
+| Ethernet7 | P2P_LINK_TO_DC2-POD1-LEAF1A_Ethernet6 | routed | - | 100.100.100.101/24 | default | 1500 | False | - | - |
+| Ethernet11 | P2P_LINK_TO_DC1-POD1-SPINE1_Ethernet7 | routed | - | 172.17.110.13/31 | default | 1500 | False | - | - |
+| Ethernet12 | P2P_LINK_TO_DC1-POD1-SPINE2_Ethernet7 | routed | - | 172.17.110.15/31 | default | 1500 | False | - | - |
 
 ### Ethernet Interfaces Device Configuration
 
@@ -530,15 +530,15 @@ interface Loopback102
 
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
-| Vlan110 | set from structured_config on svi for DC1.POD1.LEAF2A (was Tenant_A_OP_Zone_1) | Common_VRF | - | false |
-| Vlan111 | Tenant_A_OP_Zone_2 | Common_VRF | - | true |
-| Vlan112 | Tenant_A_OP_Zone_3 | Common_VRF | - | false |
-| Vlan113 | SVI_with_no_vxlan | Common_VRF | - | false |
-| Vlan1100 | test_svi | vrf_with_loopbacks_from_overlapping_pool | - | false |
-| Vlan1101 | test_svi | vrf_with_loopbacks_from_pod_pools | - | false |
-| Vlan1102 | test_svi | vrf_with_loopbacks_dc1_pod1_only | - | false |
-| Vlan4085 | L2LEAF_INBAND_MGMT | default | 1500 | false |
-| Vlan4094 | MLAG_PEER | default | 1500 | false |
+| Vlan110 | set from structured_config on svi for DC1.POD1.LEAF2A (was Tenant_A_OP_Zone_1) | Common_VRF | - | False |
+| Vlan111 | Tenant_A_OP_Zone_2 | Common_VRF | - | True |
+| Vlan112 | Tenant_A_OP_Zone_3 | Common_VRF | - | False |
+| Vlan113 | SVI_with_no_vxlan | Common_VRF | - | False |
+| Vlan1100 | test_svi | vrf_with_loopbacks_from_overlapping_pool | - | False |
+| Vlan1101 | test_svi | vrf_with_loopbacks_from_pod_pools | - | False |
+| Vlan1102 | test_svi | vrf_with_loopbacks_dc1_pod1_only | - | False |
+| Vlan4085 | L2LEAF_INBAND_MGMT | default | 1500 | False |
+| Vlan4094 | MLAG_PEER | default | 1500 | False |
 
 #### IPv4
 
@@ -698,7 +698,7 @@ ip virtual-router mac-address 00:1c:73:00:dc:01
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | true |
+| default | True |
 | Common_VRF | true |
 | MGMT | false |
 | vrf_with_loopbacks_dc1_pod1_only | true |
@@ -722,7 +722,7 @@ ip routing vrf vrf_with_loopbacks_from_pod_pools
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | false |
+| default | False |
 | Common_VRF | false |
 | MGMT | false |
 | vrf_with_loopbacks_dc1_pod1_only | false |
@@ -840,11 +840,11 @@ ip route vrf MGMT 0.0.0.0/0 192.168.1.254
 
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
-| 110 | 172.16.110.4:99110 | 99110:99110 | - | - | learned |
-| 111 | 172.16.110.4:50111 | 50111:50111 | - | - | learned |
-| 112 | 172.16.110.4:20112 | 20112:20112 | - | - | learned |
+| 110 | 172.16.110.4:99110 | 99110:99110 | - | - | learned<br>router-mac system |
+| 111 | 172.16.110.4:50111 | 50111:50111 | - | - | learned<br>router-mac system |
+| 112 | 172.16.110.4:20112 | 20112:20112 | - | - | learned<br>router-mac system |
 | 2500 | 172.16.110.4:2500 | 2500:2500 | - | - | learned |
-| 2600 | 172.16.110.4:32600 | 32600:32600 | - | - | learned |
+| 2600 | 172.16.110.4:32600 | 32600:32600 | - | - | learned<br>router-mac system |
 
 ### Router BGP VRFs
 
@@ -930,16 +930,34 @@ router bgp 65112.100
       rd 172.16.110.4:99110
       route-target both 99110:99110
       redistribute learned
+      redistribute router-mac system
+      !
+      comment
+      comment created from raw_eos_cli under router bgp svis inherited from svi profile
+      EOF
+
    !
    vlan 111
       rd 172.16.110.4:50111
       route-target both 50111:50111
       redistribute learned
+      redistribute router-mac system
+      !
+      comment
+      comment created from raw_eos_cli under router bgp svi 111
+      EOF
+
    !
    vlan 112
       rd 172.16.110.4:20112
       route-target both 20112:20112
       redistribute learned
+      redistribute router-mac system
+      !
+      comment
+      comment created from raw_eos_cli under router bgp svis inherited from svi parent profile
+      EOF
+
    !
    vlan 2500
       rd 172.16.110.4:2500
@@ -950,6 +968,12 @@ router bgp 65112.100
       rd 172.16.110.4:32600
       route-target both 32600:32600
       redistribute learned
+      redistribute router-mac system
+      !
+      comment
+      comment created from raw_eos_cli under router bgp l2vlan 2600
+      EOF
+
    !
    address-family evpn
       neighbor EVPN-OVERLAY-CORE activate
@@ -1072,34 +1096,37 @@ ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
 
 #### RM-CONN-2-BGP
 
-| Sequence | Type | Match and/or Set |
-| -------- | ---- | ---------------- |
-| 10 | permit | match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY |
-| 20 | permit | match ip address prefix-list PL-L2LEAF-INBAND-MGMT |
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | permit | ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY | - | - | - |
+| 20 | permit | ip address prefix-list PL-L2LEAF-INBAND-MGMT | - | - | - |
 
 #### RM-EVPN-FILTER-AS65101
 
-| Sequence | Type | Match and/or Set |
-| -------- | ---- | ---------------- |
-| 10 | deny | match as 65101 |
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | deny | as 65101 | - | - | - |
+| 20 | permit | - | - | - | - |
 
 #### RM-EVPN-FILTER-AS65110.100
 
-| Sequence | Type | Match and/or Set |
-| -------- | ---- | ---------------- |
-| 10 | deny | match as 65110.100 |
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | deny | as 65110.100 | - | - | - |
+| 20 | permit | - | - | - | - |
 
 #### RM-EVPN-FILTER-AS65111.100
 
-| Sequence | Type | Match and/or Set |
-| -------- | ---- | ---------------- |
-| 10 | deny | match as 65111.100 |
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | deny | as 65111.100 | - | - | - |
+| 20 | permit | - | - | - | - |
 
 #### RM-MLAG-PEER-IN
 
-| Sequence | Type | Match and/or Set |
-| -------- | ---- | ---------------- |
-| 10 | permit | set origin incomplete |
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | permit | - | origin incomplete | - | - |
 
 ### Route-maps Device Configuration
 

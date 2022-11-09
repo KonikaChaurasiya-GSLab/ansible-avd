@@ -18,6 +18,9 @@ local_users:
     no_password: < true | do not configure a password for given username. sha512_password MUST not be defined for this user. >
     sha512_password: "< SHA512 ENCRYPTED password >"
     ssh_key: "< ssh_key_string >"
+    # If "disabled" is true, the user will be removed and all other settings are ignored.
+    # Useful for removing the default "admin" user.
+    disabled: < true | false >
 
   < username_2 >:
     privilege: < (1-15) Initial privilege level with local EXEC authorization >
@@ -53,7 +56,7 @@ terminattr_smashexcludes: "< smash excludes | default -> ale,flexCounter,hardwar
 terminattr_ingestexclude: "< ingest excludes | default -> /Sysdb/cell/1/agent,/Sysdb/cell/2/agent >"
 terminattr_disable_aaa: "< boolean | default -> false >"
 
-# Management interface configuration | Required
+# Management interface configuration | Optional
 mgmt_vrf_routing: < boolean | default -> false >
 mgmt_interface: < mgmt_interface | default -> Management1 >
 mgmt_interface_vrf: < vrf_name | default -> MGMT >
@@ -81,7 +84,7 @@ snmp_settings:
   # matching the value they would take in EOS cli the algorithm requires
   # a local engineId which is unknown to AVD hence the necessity to generate
   # one beforehand.
-  compute_v3_localized_key: < boolean | default -> false >
+  compute_v3_user_localized_key: < boolean | default -> false >
   users:
     - name: < username >
       group: < group >

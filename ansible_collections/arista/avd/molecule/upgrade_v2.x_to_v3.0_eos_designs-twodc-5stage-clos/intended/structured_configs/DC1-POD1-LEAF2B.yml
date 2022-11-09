@@ -188,9 +188,9 @@ management_api_http:
   enable_vrfs:
     MGMT: {}
   enable_https: true
-eos_cli: "interface Loopback1002\n  description Loopback created from raw_eos_cli under l3leaf node-group RACK2_MLAG\n\ninterface Loopback1111\n\
-  \  description Loopback created from raw_eos_cli under platform_settings vEOS-LAB\n\ninterface Loopback1000\n  description Loopback\
-  \ created from raw_eos_cli under VRF Common_VRF\n"
+eos_cli: "interface Loopback1002\n  description Loopback created from raw_eos_cli under l3leaf node-group RACK2_MLAG\n\ninterface Loopback1111\n
+  \ description Loopback created from raw_eos_cli under platform_settings vEOS-LAB\n\ninterface Loopback1000\n  description Loopback
+  created from raw_eos_cli under VRF Common_VRF\n"
 struct_cfg:
   router_bgp:
     peer_groups:
@@ -231,8 +231,8 @@ vlan_interfaces:
   Vlan4093:
     description: MLAG_PEER_L3_PEERING
     shutdown: false
-    ip_address: 172.20.110.3/31
     mtu: 1500
+    ip_address: 172.20.110.3/31
   Vlan4094:
     description: MLAG_PEER
     shutdown: false
