@@ -6,7 +6,7 @@ router_bgp:
   peer_groups:
     UNDERLAY-PEERS:
       type: ipv4
-      password: AQQvKeimxJu+uGQ/yYvv9w==
+      password: 0nsCUm70mvSTxVO0ldytrg==
       maximum_routes: 12000
       send_community: all
     EVPN-OVERLAY-PEERS:
@@ -65,7 +65,7 @@ router_bgp:
         - '20:20'
       redistribute_routes:
       - learned
-      vlan: 310
+      vlan: '310'
 static_routes:
 - vrf: MGMT
   destination_address_prefix: 0.0.0.0/0
@@ -138,13 +138,13 @@ ethernet_interfaces:
     peer_interface: Ethernet19
     peer_type: spine
     description: P2P_LINK_TO_DC1-SPINE1_Ethernet19
+    shutdown: false
     mtu: 1500
     type: routed
-    shutdown: false
-    ip_address: 10.10.101.1/31
     link_tracking_groups:
     - name: LT_GROUP1
       direction: upstream
+    ip_address: 10.10.101.1/31
   Ethernet11:
     peer: ROUTER02_WITH_SUBIF
     peer_interface: Eth1
@@ -377,14 +377,14 @@ vlan_interfaces:
     - opzone
     description: Tenant_X_OP_Zone_1
     shutdown: false
-    vrf: Tenant_X_OP_Zone
     ip_address_virtual: 10.1.10.1/24
+    vrf: Tenant_X_OP_Zone
 vxlan_interface:
   Vxlan1:
     description: MH-LEAF1A_VTEP
     vxlan:
-      source_interface: Loopback1
       udp_port: 4789
+      source_interface: Loopback1
       vlans:
         310:
           vni: 11310

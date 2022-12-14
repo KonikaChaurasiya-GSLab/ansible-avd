@@ -8,7 +8,7 @@ router_bgp:
   peer_groups:
     UNDERLAY-PEERS:
       type: ipv4
-      password: AQQvKeimxJu+uGQ/yYvv9w==
+      password: 0nsCUm70mvSTxVO0ldytrg==
       maximum_routes: 12000
       send_community: all
     EVPN-OVERLAY-PEERS:
@@ -31,7 +31,6 @@ router_bgp:
       update_source: lo0
       bfd: false
       ebgp_multihop: 3
-      set_ipv4_next_hop: 1.1.1.1
       route_map_out: TEST_OUT
       route_map_in: TEST_IN
       local_as: 777
@@ -139,6 +138,8 @@ router_bgp:
         export:
           evpn:
           - '31:31'
+      redistribute_routes:
+      - connected
       neighbors:
         2.2.2.2:
           peer_group: Tenant_C_BGP_PEER_GROUP
@@ -146,8 +147,6 @@ router_bgp:
         2.2.2.3:
           peer_group: Tenant_C_BGP_PEER_GROUP2
           description: test_bgp_peer_group_without_nodes_2nd_time
-      redistribute_routes:
-      - connected
       address_families:
         ipv4:
           neighbors:
@@ -163,7 +162,7 @@ router_bgp:
         - '14:14'
       redistribute_routes:
       - learned
-      vlan: 150
+      vlan: '150'
     Tenant_B_WAN_Zone:
       rd: 192.168.255.16:21
       route_targets:
@@ -171,7 +170,7 @@ router_bgp:
         - '21:21'
       redistribute_routes:
       - learned
-      vlan: 250
+      vlan: '250'
     Tenant_C_WAN_Zone:
       rd: 192.168.255.16:31
       route_targets:
@@ -179,7 +178,7 @@ router_bgp:
         - '31:31'
       redistribute_routes:
       - learned
-      vlan: 350
+      vlan: '350'
 static_routes:
 - vrf: MGMT
   destination_address_prefix: 0.0.0.0/0
@@ -266,9 +265,9 @@ ethernet_interfaces:
     peer_type: spine
     description: P2P_LINK_TO_DC1-SPINE1_Ethernet24
     speed: forced 100gfull
+    shutdown: false
     mtu: 1500
     type: routed
-    shutdown: false
     ip_address: 172.31.254.225/31
   Ethernet2:
     peer: DC1-SPINE2
@@ -276,9 +275,9 @@ ethernet_interfaces:
     peer_type: spine
     description: P2P_LINK_TO_DC1-SPINE2_Ethernet24
     speed: forced 100gfull
+    shutdown: false
     mtu: 1500
     type: routed
-    shutdown: false
     ip_address: 172.31.254.227/31
   Ethernet3:
     peer: DC1-SPINE3
@@ -286,9 +285,9 @@ ethernet_interfaces:
     peer_type: spine
     description: P2P_LINK_TO_DC1-SPINE3_Ethernet24
     speed: forced 100gfull
+    shutdown: false
     mtu: 1500
     type: routed
-    shutdown: false
     ip_address: 172.31.254.229/31
   Ethernet4:
     peer: DC1-SPINE4
@@ -296,9 +295,9 @@ ethernet_interfaces:
     peer_type: spine
     description: P2P_LINK_TO_DC1-SPINE4_Ethernet24
     speed: forced 100gfull
+    shutdown: false
     mtu: 1500
     type: routed
-    shutdown: false
     ip_address: 172.31.254.231/31
 loopback_interfaces:
   Loopback0:
@@ -348,8 +347,8 @@ vlan_interfaces:
     - wan
     description: Tenant_A_WAN_Zone_1
     shutdown: false
-    vrf: Tenant_A_WAN_Zone
     ip_address_virtual: 10.1.40.1/24
+    vrf: Tenant_A_WAN_Zone
     ospf_area: 1
     ospf_network_point_to_point: false
     ospf_cost: 100
@@ -361,22 +360,22 @@ vlan_interfaces:
     - wan
     description: Tenant_B_WAN_Zone_1
     shutdown: false
-    vrf: Tenant_B_WAN_Zone
     ip_address_virtual: 10.2.50.1/24
+    vrf: Tenant_B_WAN_Zone
   Vlan350:
     tenant: Tenant_C
     tags:
     - wan
     description: Tenant_C_WAN_Zone_1
     shutdown: false
-    vrf: Tenant_C_WAN_Zone
     ip_address_virtual: 10.3.50.1/24
+    vrf: Tenant_C_WAN_Zone
 vxlan_interface:
   Vxlan1:
     description: DC1-BL2A_VTEP
     vxlan:
-      source_interface: Loopback1
       udp_port: 4789
+      source_interface: Loopback1
       vlans:
         150:
           vni: 10150
