@@ -1,0 +1,241 @@
+graph parent {
+	graph [splines=line]
+	node [center=true color=lightblue fixedsize=true fontcolor=yellow fontname=arial fontsize=" 10pt" height=1 image="switch.jpg" labelloc=t pin=True shape=box style=filled width=1]
+	edge [center=true concentrate=true fontname=arial fontsize=8 labelfloat=false minlen=2 weight=0]
+	rank=same
+	ranksep=0.7
+	subgraph cluster_child_fabric_name {
+		label=fabric_name
+		labelloc=t
+		{
+			rank=same
+		}
+		{
+			rank=same
+		}
+		{
+			rank=same
+		}
+		{
+			rank=same
+		}
+		{
+			rank=same
+		}
+		{
+			rank=same
+		}
+		ranksep=0.7
+		subgraph cluster_child_dc_name1 {
+			label=dc_name1
+			labelloc=t
+			{
+				rank=same
+			}
+			{
+				rank=same
+			}
+			{
+				rank=same
+				"super-spine1"
+				"super-spine2"
+			}
+			{
+				rank=same
+			}
+			{
+				rank=same
+			}
+			{
+				rank=same
+			}
+			ranksep=0.7
+			subgraph cluster_child_pod_name1 {
+				label=pod_name1
+				labelloc=t
+				{
+					rank=same
+				}
+				{
+					rank=same
+				}
+				{
+					rank=same
+				}
+				{
+					rank=same
+					spine1
+					spine2
+				}
+				{
+					rank=same
+					"l3-leaf1"
+					"l3-leaf2"
+				}
+				{
+					rank=same
+					"l2-leaf1"
+				}
+			}
+			ranksep=0.7
+			subgraph cluster_child_pod_name2 {
+				label=pod_name2
+				labelloc=t
+				{
+					rank=same
+					spine3
+				}
+				{
+					rank=same
+				}
+				{
+					rank=same
+				}
+				{
+					rank=same
+					spine4
+					spine5
+				}
+				{
+					rank=same
+					"l3-leaf3"
+					"l3-leaf4"
+					"l3-leaf5"
+				}
+				{
+					rank=same
+					"l2-leaf2"
+				}
+			}
+		}
+		ranksep=0.7
+		subgraph cluster_child_dc_name2 {
+			label=dc_name2
+			labelloc=t
+			{
+				rank=same
+			}
+			{
+				rank=same
+			}
+			{
+				rank=same
+				"super-spine3"
+				"super-spine4"
+			}
+			{
+				rank=same
+			}
+			{
+				rank=same
+			}
+			{
+				rank=same
+			}
+			ranksep=0.7
+			subgraph cluster_child_pod_name3 {
+				label=pod_name3
+				labelloc=t
+				{
+					rank=same
+				}
+				{
+					rank=same
+				}
+				{
+					rank=same
+				}
+				{
+					rank=same
+					spine6
+					spine7
+					spine8
+					spine9
+				}
+				{
+					rank=same
+					"l3-leaf6"
+					"l3-leaf7"
+					"l3-leaf8"
+					"l3-leaf9"
+					"l3-leaf10"
+				}
+				{
+					rank=same
+					"l2-leaf3"
+					"l2-leaf4"
+				}
+			}
+		}
+	}
+	"super-spine1" -- spine1
+	"super-spine1" -- spine2
+	"super-spine1" -- spine4
+	"super-spine1" -- spine5
+	"super-spine2" -- spine1
+	"super-spine2" -- spine2
+	"super-spine2" -- spine4
+	"super-spine2" -- spine5
+	spine2 -- "l3-leaf1"
+	spine2 -- "l3-leaf2"
+	"l3-leaf1" -- "l2-leaf1"
+	"l3-leaf1" -- "l3-leaf2"
+	spine1 -- "l3-leaf1"
+	spine1 -- "l3-leaf2"
+	"l3-leaf2" -- "l2-leaf1"
+	"l3-leaf2" -- "l3-leaf1"
+	"l2-leaf1" -- "l3-leaf1"
+	"l2-leaf1" -- "l3-leaf2"
+	spine3 -- "l3-leaf4"
+	spine3 -- "l3-leaf5"
+	"l3-leaf3" -- "l3-leaf1"
+	"l3-leaf3" -- "l3-leaf2"
+	spine4 -- "l3-leaf3"
+	spine4 -- "l3-leaf4"
+	spine4 -- "l3-leaf5"
+	spine5 -- "l3-leaf3"
+	spine5 -- "l3-leaf4"
+	spine5 -- "l3-leaf5"
+	"l3-leaf5" -- "l2-leaf2"
+	"l3-leaf5" -- "l3-leaf4"
+	"l3-leaf4" -- "l2-leaf2"
+	"l3-leaf4" -- "l3-leaf5"
+	"super-spine3" -- spine6
+	"super-spine3" -- spine7
+	"super-spine3" -- spine8
+	"super-spine3" -- spine9
+	"super-spine4" -- spine6
+	"super-spine4" -- spine7
+	"super-spine4" -- spine8
+	"super-spine4" -- spine9
+	"l3-leaf7" -- "l3-leaf8"
+	spine7 -- "l3-leaf6"
+	spine7 -- "l3-leaf7"
+	spine7 -- "l3-leaf8"
+	spine7 -- "l3-leaf9"
+	spine7 -- "l3-leaf10"
+	spine6 -- "l3-leaf6"
+	spine6 -- "l3-leaf7"
+	spine6 -- "l3-leaf8"
+	spine6 -- "l3-leaf9"
+	spine6 -- "l3-leaf10"
+	"l2-leaf3" -- "l2-leaf4"
+	"l3-leaf10" -- "l3-leaf9"
+	"l3-leaf10" -- "l2-leaf3"
+	"l3-leaf10" -- "l2-leaf4"
+	"l2-leaf4" -- "l2-leaf3"
+	"l3-leaf9" -- "l3-leaf10"
+	"l3-leaf9" -- "l2-leaf3"
+	"l3-leaf9" -- "l2-leaf4"
+	"l3-leaf8" -- "l3-leaf7"
+	spine8 -- "l3-leaf6"
+	spine8 -- "l3-leaf7"
+	spine8 -- "l3-leaf8"
+	spine8 -- "l3-leaf9"
+	spine8 -- "l3-leaf10"
+	spine9 -- "l3-leaf6"
+	spine9 -- "l3-leaf7"
+	spine9 -- "l3-leaf8"
+	spine9 -- "l3-leaf9"
+	spine9 -- "l3-leaf10"
+}
